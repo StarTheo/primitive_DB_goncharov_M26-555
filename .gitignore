@@ -1,0 +1,19 @@
+# Виртуальное окружение
+.venv/
+
+# Сборка пакета
+dist/
+build/
+*.egg-info/
+
+# Кэши Python и Ruff
+__pycache__/
+*.py[cod]
+.ruff_cache/
+
+# Локальные данные базы
+db_meta.json
+data/
+
+# Временные файлы записи
+*.tmp
