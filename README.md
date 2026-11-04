@@ -107,3 +107,30 @@ drop_table people
 Ключ включает имя таблицы и условие where, в том числе его отсутствие.
 После успешных изменений кэш сбрасывается.
 Ошибки и отмена удаления не сбрасывают кэш.
+
+
+## Демонстрация
+
+Запись показывает создание таблицы, CRUD-операции, проверку типов,
+отмену и подтверждение удаления.
+
+[![Демонстрация Primitive DB](https://asciinema.org/a/beSGqaOPOs53u6N5.svg)](https://asciinema.org/a/beSGqaOPOs53u6N5)
+
+Исходный файл записи: [docs/demo.cast](docs/demo.cast).
+
+
+## Сборка и проверка пакета
+
+```shell
+uv build
+uvx twine check dist/*
+```
+
+Установка собранного wheel в Windows:
+
+```powershell
+uv tool install --link-mode copy .\dist\primitive_db-0.1.0-py3-none-any.whl
+```
+
+После установки приложение запускается командой database.
+Публикация пакета на PyPI не требуется.

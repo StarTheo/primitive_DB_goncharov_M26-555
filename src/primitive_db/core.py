@@ -1,6 +1,6 @@
 """Основная логика управления таблицами."""
 
-from primitive_db.constants import VALID_TYPES
+from primitive_db.constants import FIRST_ID, ID_COLUMN, ID_TYPE, VALID_TYPES
 from primitive_db.decorators import confirm_action, handle_db_errors, log_time
 from primitive_db.utils import delete_table_data, load_table_data
 
@@ -17,7 +17,7 @@ def create_table(metadata, table_name, columns):
     if not columns:
         raise ValueError("Укажите хотя бы один столбец.")
 
-    schema = {"ID": "int"}
+    schema = {ID_COLUMN: ID_TYPE}
     seen_columns = set()
 
     for column in columns:
@@ -36,7 +36,7 @@ def create_table(metadata, table_name, columns):
         if column_type not in VALID_TYPES:
             raise ValueError(f"неподдерживаемый тип: {column_type}.")
 
-        if column_name == "ID" and column_type != "int":
+        if column_name == ID_COLUMN and column_type != ID_TYPE:
             raise ValueError("Столбец ID должен иметь тип int.")
 
         schema[column_name] = column_type
@@ -91,10 +91,10 @@ def insert(metadata, table_name, values):
     ids = []
 
     for row in rows:
-        ids.append(row["ID"])
+        ids.append(row[ID_COLUMN])
 
-    new_id = max(ids, default=0) + 1
-    new_row = {"ID": new_id}
+    new_id = max(ids, default=FIRST_ID - 1) + 1
+    new_row = {ID_COLUMN: new_id}
 
     for column_name, value in zip(columns, values):
         new_row[column_name] = value
@@ -134,7 +134,7 @@ def validate_clause(schema, clause, for_update=False):
         if column_name not in schema:
             raise ValueError(f'Столбец "{column_name}" не существует.')
 
-        if for_update and column_name == "ID":
+        if for_update and column_name == ID_COLUMN:
             raise ValueError("Изменение ID запрещено.")
 
         validate_value(column_name, schema[column_name], value)
