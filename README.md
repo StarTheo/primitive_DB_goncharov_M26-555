@@ -52,3 +52,23 @@ uv run database
 uv run project
 ```
 
+## Проверка кода
+
+Проверка ошибок и стиля:
+
+```shell
+uv run ruff check .
+```
+
+Проверка форматирования без изменения файлов:
+
+```shell
+uv run ruff format --check .
+```
+
+Автоматическое форматирование:
+
+```shell
+uv run ruff format .
+```
+
