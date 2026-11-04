@@ -1,9 +1,11 @@
 """Основная логика управления таблицами."""
 
 from primitive_db.constants import VALID_TYPES
+from primitive_db.decorators import confirm_action, handle_db_errors, log_time
 from primitive_db.utils import delete_table_data, load_table_data
 
 
+@handle_db_errors
 def create_table(metadata, table_name, columns):
     """Проверяет столбцы и добавляет новую таблицу в метаданные."""
     if not table_name.isidentifier():
@@ -44,6 +46,8 @@ def create_table(metadata, table_name, columns):
     return metadata
 
 
+@handle_db_errors
+@confirm_action("удаление таблицы")
 def drop_table(metadata, table_name):
     """Удаляет файл данных таблицы и её схему."""
     if table_name not in metadata:
@@ -64,6 +68,8 @@ def validate_value(column_name, column_type, value):
         )
 
 
+@handle_db_errors
+@log_time
 def insert(metadata, table_name, values):
     """Проверяет значения и возвращает записи с добавленной строкой."""
     if table_name not in metadata:
@@ -106,6 +112,8 @@ def matches(row, where_clause):
     return True
 
 
+@handle_db_errors
+@log_time
 def select(table_data, where_clause=None):
     """Возвращает все записи или записи, соответствующие условию."""
     selected_rows = []
@@ -132,6 +140,7 @@ def validate_clause(schema, clause, for_update=False):
         validate_value(column_name, schema[column_name], value)
 
 
+@handle_db_errors
 def update(table_data, set_clause, where_clause):
     """Изменяет поля записей, соответствующих условию."""
     for row in table_data:
@@ -141,6 +150,8 @@ def update(table_data, set_clause, where_clause):
     return table_data
 
 
+@handle_db_errors
+@confirm_action("удаление записей")
 def delete(table_data, where_clause):
     """Возвращает записи, не соответствующие условию удаления."""
     remaining_rows = []
@@ -150,3 +161,11 @@ def delete(table_data, where_clause):
             remaining_rows.append(row)
 
     return remaining_rows
+
+
+def require_table(metadata, table_name):
+    """Возвращает схему таблицы или сообщает о её отсутствии."""
+    if table_name not in metadata:
+        raise ValueError(f'Таблица "{table_name}" не существует.')
+
+    return metadata[table_name]
