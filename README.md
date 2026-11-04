@@ -75,3 +75,23 @@ uv run ruff format --check .
 uv run ruff format .
 ```
 
+## CRUD-операции
+
+Пример работы с таблицей:
+
+```text
+create_table people name:str age:int is_active:bool
+insert into people values ("Ivan", 28, true)
+select from people
+select from people where age = 28
+update people set age = 29 where ID = 1
+info people
+delete from people where ID = 1
+drop_table people
+```
+
+Все поля обязательны. ID создаётся автоматически, его изменение запрещено.
+Строки вводятся в кавычках. Поддерживаются типы int, str, bool.
+В условиях where проверяются существование столбца и тип значения.
+Данные таблиц сохраняются в отдельных JSON-файлах в папке data.
+Удаление таблицы также удаляет её файл данных.
