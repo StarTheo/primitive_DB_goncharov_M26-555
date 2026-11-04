@@ -114,7 +114,7 @@ drop_table people
 Запись показывает создание таблицы, CRUD-операции, проверку типов,
 отмену и подтверждение удаления.
 
-[![Демонстрация Primitive DB](https://asciinema.org/a/beSGqaOPOs53u6N5.svg)](https://asciinema.org/a/beSGqaOPOs53u6N5)
+[![Демонстрация Primitive DB](docs/demo-preview.svg)](https://asciinema.org/a/beSGqaOPOs53u6N5)
 
 Исходный файл записи: [docs/demo.cast](docs/demo.cast).
 
