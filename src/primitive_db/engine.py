@@ -5,7 +5,7 @@ import shlex
 import prompt
 from prettytable import PrettyTable
 
-from primitive_db.constants import META_FILE, STATUS_CHANGED, STATUS_EXIT
+from primitive_db.constants import ID_COLUMN, META_FILE, STATUS_CHANGED, STATUS_EXIT
 from primitive_db.core import (
     create_table,
     delete,
@@ -95,7 +95,7 @@ def execute_command(command, cache_result):
         if rows is None:
             return
         save_table_data(table_name, rows)
-        row_id = rows[-1]["ID"]
+        row_id = rows[-1][ID_COLUMN]
         print(f'Запись с ID={row_id} успешно добавлена в таблицу "{table_name}".')
         return STATUS_CHANGED
     elif args[0] == "select":
@@ -124,7 +124,7 @@ def execute_command(command, cache_result):
         affected_ids = []
         for row in rows:
             if matches(row, where_clause):
-                affected_ids.append(row["ID"])
+                affected_ids.append(row[ID_COLUMN])
         updated_rows = update(rows, set_clause, where_clause)
         if updated_rows is None:
             return
@@ -143,7 +143,7 @@ def execute_command(command, cache_result):
         affected_ids = []
         for row in rows:
             if matches(row, where_clause):
-                affected_ids.append(row["ID"])
+                affected_ids.append(row[ID_COLUMN])
         remaining_rows = delete(rows, where_clause)
         if remaining_rows is None:
             return
@@ -204,7 +204,7 @@ def execute_command(command, cache_result):
         print(f"Функции {args[0]} нет. Попробуйте снова.")
 
 
-def welcome():
+def run():
     """Запрашивает команды, управляет выходом и сбросом кэша."""
     print_help()
     cache_result = create_cacher()

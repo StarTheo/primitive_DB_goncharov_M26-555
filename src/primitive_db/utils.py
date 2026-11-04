@@ -3,19 +3,19 @@
 import json
 import os
 
-from primitive_db.constants import DATA_DIR
+from primitive_db.constants import DATA_DIR, JSON_ENCODING, JSON_INDENT
 
 
 def save_metadata(filepath, data):
     """Сохраняет метаданные в JSON-файл."""
-    with open(filepath, "w", encoding="utf-8") as file:
-        json.dump(data, file, ensure_ascii=False, indent=2)
+    with open(filepath, "w", encoding=JSON_ENCODING) as file:
+        json.dump(data, file, ensure_ascii=False, indent=JSON_INDENT)
 
 
 def load_metadata(filepath):
     """Загружает метаданные или возвращает пустой словарь без файла."""
     try:
-        with open(filepath, "r", encoding="utf-8") as file:
+        with open(filepath, "r", encoding=JSON_ENCODING) as file:
             return json.load(file)
     except FileNotFoundError:
         return {}
@@ -26,7 +26,7 @@ def load_table_data(table_name):
     filepath = os.path.join(DATA_DIR, f"{table_name}.json")
 
     try:
-        with open(filepath, "r", encoding="utf-8") as file:
+        with open(filepath, "r", encoding=JSON_ENCODING) as file:
             return json.load(file)
     except FileNotFoundError:
         return []
@@ -37,8 +37,8 @@ def save_table_data(table_name, data):
     os.makedirs(DATA_DIR, exist_ok=True)
     filepath = os.path.join(DATA_DIR, f"{table_name}.json")
 
-    with open(filepath, "w", encoding="utf-8") as file:
-        json.dump(data, file, ensure_ascii=False, indent=2)
+    with open(filepath, "w", encoding=JSON_ENCODING) as file:
+        json.dump(data, file, ensure_ascii=False, indent=JSON_INDENT)
 
 
 def delete_table_data(table_name):
